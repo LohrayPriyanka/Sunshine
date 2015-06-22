@@ -50,10 +50,11 @@ public class MainActivityFragment extends Fragment {
    public ArrayAdapter<String> mForecastAdapter;
     private final static String LOG_TAG = MainActivityFragment.class.getSimpleName();
     private static String[] weatherForecast = {};
-    private static String location = "";
-    private static String temp_units = "";
-    private static String days = "";
-    private static String[] weatherParams = new String[3];
+    private static ListView listView;
+   // private static String location = "";
+   // private static String temp_units = "";
+    //private static String days = "";
+   // private static String[] weatherParams = new String[3];
     private static String[] geoParams = new String[2];
 
     public MainActivityFragment() {
@@ -72,24 +73,9 @@ public class MainActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        /*String[] data = {
-                "Mon 6/23 - Sunny - 31/17",
-                "Tue 6/24 - Cloudy - 21/8",
-                "Wed 6/25 - Cloudy - 22/17",
-                "Thurs 6/26 - Rainy - 18/11",
-                "Fri 6/27 - Foggy - 21/10",
-                "Sat 6/28 - Rainy - 23/18",
-                "Sun 6/29 - Sunny - 20/7"
-        };*/
-        String[] data= {
-                "Mon 6/23 - Sunny - 31/17",
-                "Tue 6/24 - Cloudy - 21/8",
-                "Wed 6/25 - Cloudy - 22/17",
-                "Thurs 6/26 - Rainy - 18/11",
-                "Fri 6/27 - Foggy - 21/10",
-                "Sat 6/28 - Rainy - 23/18",
-                "Sun 6/29 - Sunny - 20/7"
-        };
+
+        String[] data= {};
+
         List<String> weekForecast = new ArrayList<String>(Arrays.asList(data));
 
 
@@ -99,8 +85,8 @@ public class MainActivityFragment extends Fragment {
                 weekForecast);
 
 
-       // new FetchWeatherTask().execute("95054");
-        ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
+       new FetchWeatherTask().execute("95054");
+        listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(mForecastAdapter);
 
 
@@ -111,9 +97,7 @@ public class MainActivityFragment extends Fragment {
 
     public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
-        public FetchWeatherTask(){
 
-        }
         private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
 
 
@@ -125,7 +109,7 @@ public class MainActivityFragment extends Fragment {
          * into an Object hierarchy for us.
          */
 
-        //  @Override
+         @Override
         protected String[] doInBackground(String... params) {
 
             /* If there's no zip code, there's nothing to loop up. Verify size of params.*/
@@ -149,7 +133,7 @@ public class MainActivityFragment extends Fragment {
            /* Construct the URL for the OpenWeatherMap query
             //// Possible parameters are available at OWM's forecast API page, at
             //// http://openweathermap.org/API#forecast*/
-                final String FORECAST_BASE_URL = "http://api.openweathermap.org/data/2.5/forecast/daily?";
+                //final String FORECAST_BASE_URL = "http://api.openweathermap.org/data/2.5/forecast/daily?";
                 final String QUERY_PARAM = "q";
                 final String FORMAT_PARAM = "mode";
                 final String UNITS_PARAM = "units";
@@ -210,11 +194,18 @@ public class MainActivityFragment extends Fragment {
                     Double maxTemperature = weatherDataJsonParser.getMaxTemperatureForDay(forecastJsonStr, 4);
                     geoParams = weatherDataJsonParser.getGeoDetails(forecastJsonStr);
                     Log.v(LOG_TAG, "Maximum Temperature for day " + maxTemperature);
-                    weatherForecast = getWeatherDataFromJson(forecastJsonStr, weekDays);
-                    Log.v(LOG_TAG, "Weather Forecast " + weatherForecast);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                  try
+                  {
+                      weatherForecast = getWeatherDataFromJson(forecastJsonStr, weekDays);
+                      Log.v(LOG_TAG, "Weather Forecast " + weatherForecast);
+                  }
+                  catch (JSONException e) {
+                      e.printStackTrace();
+                  }
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Error ", e);
                 // If the code didn't successfully get the weather data, there's no point in attempting
@@ -281,7 +272,7 @@ public class MainActivityFragment extends Fragment {
     private String getReadableDateString(Date cal) {
             /* Because the API returns a unix timestamp (measured in seconds),
             // it must be converted to milliseconds in order to be converted to valid date.*/
-        SimpleDateFormat shortenedDateFormat = new SimpleDateFormat("EEE MMM dd");
+        SimpleDateFormat shortenedDateFormat = new SimpleDateFormat("EEE MMM dd", Locale.US);
         return shortenedDateFormat.format(cal);
     }
 
@@ -338,7 +329,7 @@ public class MainActivityFragment extends Fragment {
 
         Log.v(LOG_TAG, " Start Date : " + Calendar.DAY_OF_MONTH);
 
-        String[] resultStrs = new String[numDays + 1];
+        String[] resultStrs = new String[numDays];
         for (int i = 0; i < weatherArray.length(); i++) {
                 /* For now, using the format "Day, description, hi/low"*/
             String day;

@@ -65,16 +65,7 @@ public class WeatherDataJsonParser {
                                                break;
                                    }
                             }//end of for loop
-                    }//check for null
-
-                        //Alternate Solution:
-                                /*
-        JSONObject weatherObject = new JSONObject(weatherJsonStr);
-        JSONArray weatherDataList = weatherObject.getJSONArray(weatherJsonArrayList);
-        JSONObject weatherDayObject = weatherDataList.getJSONObject(dayIndex);
-        JSONObject weatherTempAttribute = weatherDayObject.getJSONObject(weatherJsonObjectTemp);
-       return weatherTempAttribute.getDouble("max");
-        */
+                    }
 
 
                                                        return maxTemperatureArray;
