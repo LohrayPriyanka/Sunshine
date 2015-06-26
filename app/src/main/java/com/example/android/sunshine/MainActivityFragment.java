@@ -74,9 +74,9 @@ public class MainActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        String[] data= {};
+        String[] data = {};
 
-        List<String> weekForecast = new ArrayList<String>(Arrays.asList(data));
+        final List<String> weekForecast = new ArrayList<String>(Arrays.asList(data));
 
 
         mForecastAdapter = new ArrayAdapter<String>(getActivity(),
@@ -85,10 +85,23 @@ public class MainActivityFragment extends Fragment {
                 weekForecast);
 
 
-       new FetchWeatherTask().execute("95054");
+        new FetchWeatherTask().execute("95054");
         listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(mForecastAdapter);
 
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long rowID)
+            {
+
+                String forecast = mForecastAdapter.getItem(position);
+                Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
+
+            }
+        });
 
 
         return rootView;
