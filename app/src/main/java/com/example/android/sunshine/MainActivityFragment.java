@@ -90,16 +90,16 @@ public class MainActivityFragment extends Fragment {
         listView.setAdapter(mForecastAdapter);
 
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long rowID)
-            {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long rowID) {
 
                 String forecast = mForecastAdapter.getItem(position);
                 Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
-
+                Intent intent = new Intent(getActivity(), DetailActivity.class)
+                                               .putExtra(Intent.EXTRA_TEXT, forecast);
+                               startActivity(intent);
             }
         });
 
