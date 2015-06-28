@@ -33,8 +33,6 @@ import java.net.URL;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -74,15 +72,12 @@ public class MainActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        String[] data = {};
-
-        final List<String> weekForecast = new ArrayList<String>(Arrays.asList(data));
-
-
+        // The ArrayAdapter will take data from a source and
+        // use it to populate the ListView it's attached to.
         mForecastAdapter = new ArrayAdapter<String>(getActivity(),
                 R.layout.list_item_forecast,
                 R.id.list_item_forecast_textview,
-                weekForecast);
+                new ArrayList<String>());
 
 
         new FetchWeatherTask().execute("95054");
@@ -107,7 +102,20 @@ public class MainActivityFragment extends Fragment {
         return rootView;
     }
 
+    private void updateWeather() {
+                FetchWeatherTask weatherTask = new FetchWeatherTask();
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                String location = prefs.getString(getString(R.string.pref_location_key),
+                                getString(R.string.pref_location_default));
+                weatherTask.execute(location);
+            }
 
+                @Override
+        public void onStart() {
+                super.onStart();
+               updateWeather();
+            }
+    
     public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
 
@@ -271,11 +279,7 @@ public class MainActivityFragment extends Fragment {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {
             Log.d("Action Refresh", ">>>>>>>>>> Action Refresh");
-            FetchWeatherTask fetchWeatherTask = new FetchWeatherTask();
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                       String location = prefs.getString(getString(R.string.pref_location_key),
-                                        getString(R.string.pref_location_default));
-                        fetchWeatherTask.execute(location);
+            updateWeather();
             return true;
         }
 
