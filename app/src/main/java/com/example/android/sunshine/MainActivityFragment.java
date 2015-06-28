@@ -272,7 +272,10 @@ public class MainActivityFragment extends Fragment {
         if (id == R.id.action_refresh) {
             Log.d("Action Refresh", ">>>>>>>>>> Action Refresh");
             FetchWeatherTask fetchWeatherTask = new FetchWeatherTask();
-            fetchWeatherTask.execute("95054");
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                       String location = prefs.getString(getString(R.string.pref_location_key),
+                                        getString(R.string.pref_location_default));
+                        fetchWeatherTask.execute(location);
             return true;
         }
 

@@ -4,4 +4,13 @@
     <string name="action_settings">Settings</string>
     <string name="action_refresh" translable ="false">Refresh</string>
     <string name="title_activity_detail">Each weather details</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <string name="pref_location_label">Location</string>
+    <string name="pref_location_key" translable ="false">Location</string>
+    <string name="pref_location_default" translable ="false">95054</string>
+
+    <string name="pref_location_units" translable ="false">Pick your units</string>
+    <string name="pref_metric" translable ="false">Metric</string>
+    <string name="pref_imperial" translable ="false">Imperial</string>
 </resources>
