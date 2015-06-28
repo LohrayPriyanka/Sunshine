@@ -10,11 +10,12 @@
         android:inputType="text"
         android:singleLine="true" />
 
-    <CheckBoxPreference
-    android:key="pref_location_units"
-    android:title="@string/pref_location_label"
-    android:summary="@string/pref_imperial"
-    android:defaultValue="pref_metric"
-         />
+    <ListPreference
+        android:title="@string/pref_units_label"
+        android:key="@string/pref_units_key"
+        android:defaultValue="@string/pref_units_metric"
+        android:entryValues="@array/pref_units_values"
+        android:entries="@array/pref_units_options" />
+
 
 </PreferenceScreen>
